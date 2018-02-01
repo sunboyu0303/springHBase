@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <configuration>
+        //Here you have to set the path where you want HBase to store its files.
+        <property>
+            <name>hbase.rootdir</name>
+            <value>file:/home/hadoop/HBase/HFiles</value>
+        </property>
+
+        <property>
+            <name>hbase.zookeeper.quorum</name>
+            <value>jd.sby</value>
+        </property>
+
+        //Here you have to set the path where you want HBase to store its built in zookeeper files.
+        <property>
+            <name>hbase.zookeeper.property.dataDir</name>
+            <value>/opt/zookeeper-3.4.11</value>
+        </property>
+        <property>
+            <name>hbase.cluster.distributed</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>>hbase.rootdir</name>
+            <value>hdfs://192.168.124.128:8030/hbase</value>
+        </property>
+    </configuration>
+
+</configuration>
