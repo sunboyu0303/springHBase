@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by sunboyu on 2018/2/1.
@@ -29,12 +30,21 @@ public class TestController {
     @GetMapping
     public String test() {
         Scan scan = new Scan();
-        hbaseTemplate.find("emp", scan, new RowMapper<Result>() {
+        List<Result> list = hbaseTemplate.find("student", scan, new RowMapper<Result>() {
             @Override
             public Result mapRow(Result result, int i) throws Exception {
+                for (Cell cell : result.rawCells()) {
+                    System.out.println("row:" + Bytes.toString(CellUtil.cloneRow(cell)));
+                    System.out.println("family:" + Bytes.toString(CellUtil.cloneFamily(cell)));
+                    System.out.println("qualifier:" + Bytes.toString(CellUtil.cloneQualifier(cell)));
+                    System.out.println("value:" + Bytes.toString(CellUtil.cloneValue(cell)));
+                    System.out.println("timestamp:" + cell.getTimestamp());
+                    System.out.println("-------------------------------------------");
+                }
                 return result;
             }
         });
+        System.out.println(list);
         return "done";
     }
 
@@ -44,7 +54,7 @@ public class TestController {
         conf.set("hbase.zookeeper.quorum", "192.168.124.128");
         conf.set("hbase.zookeeper.property.clientPort", "2181");
         Connection conn = ConnectionFactory.createConnection(conf);
-        HTable table = (HTable) conn.getTable(TableName.valueOf("member"));
+        HTable table = (HTable) conn.getTable(TableName.valueOf("student"));
 
         Put put = new Put("zpc".getBytes());
 
@@ -64,7 +74,7 @@ public class TestController {
 
         Scan scan = new Scan();
 
-        HTable table = (HTable) conn.getTable(TableName.valueOf("emp"));
+        HTable table = (HTable) conn.getTable(TableName.valueOf("student"));
 
         ResultScanner results = table.getScanner(scan);
 
